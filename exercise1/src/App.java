@@ -12,6 +12,25 @@ class Player {
         this.health = health;
     }
 
+    void Attack(Player enemy) {
+        double attackPower = this.weapon.attackPower;
+        System.out.println(this.name + " attacking " + enemy.name + " with power " + attackPower);
+        enemy.Defence(attackPower);
+    }
+
+    void Defence(double attackPower) {
+        double damage;
+        if (this.armour.defencePower < attackPower) {
+            damage = attackPower - this.armour.defencePower;
+        } else {
+            damage = 0;
+        }
+
+        this.health -= damage;
+
+        System.out.println(this.name + " got damage " + damage);
+    }
+
     void equipWeapon (Weapon weapon) {
         this.weapon = weapon;
     }
@@ -39,7 +58,7 @@ class Weapon {
     }
 
     void display() {
-        System.out.printf("Weapon = %s | attack power = %.2f\n", this.name, this.attackPower);
+        System.out.printf("Weapon = %s | attack power = %.1f\n", this.name, this.attackPower);
     }
 }
 
@@ -54,7 +73,7 @@ class Armour {
     } 
 
     void display() {
-        System.out.printf("Armour = %s | defence power = %.2f\n", this.name, this.defencePower);
+        System.out.printf("Armour = %s | defence power = %.1f\n", this.name, this.defencePower);
     }
 }
 
@@ -70,14 +89,25 @@ public class App {
         Weapon sigil_arrow = new Weapon("Sigil Arrow", 20);
 
         // object armour
-        Armour armour_max = new Armour("Armour Max", 50);
+        Armour armour_max = new Armour("Armour Max", 10);
+        Armour armour_min = new Armour("Armour Min", 0);
 
         kratos.equipWeapon(blade_of_chaos);
         kratos.equipArmour(armour_max);
         kratos.display();
 
         freya.equipWeapon(sigil_arrow);
-        freya.equipArmour(armour_max);
+        freya.equipArmour(armour_min);
+        freya.display();
+
+        System.out.println("\nBattle");
+
+        kratos.Attack(freya);
+        freya.Attack(kratos);
+
+        System.out.println();
+
+        kratos.display();
         freya.display();
 
     }
